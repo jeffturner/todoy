@@ -1,0 +1,15 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "todoy",
+      "image": "jeffturner/todoy",
+      "memory": 256,
+      "essential": true,
+      "portMappings": [{
+        "containerPort": 8080,
+        "hostPort": 0
+      }]
+    }
+  ],
+  "family": "todoy-services"
+}

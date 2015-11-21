@@ -1,0 +1,20 @@
+node1:
+  build: ./todoy
+  links:
+    - redis
+
+node2:
+  build: ./todoy
+  links:
+    - redis
+
+nginx:
+  build: ./nginx
+  links:
+    - node1
+    - node2
+  ports:
+    - "8080:80"
+
+redis:
+  image: redis
