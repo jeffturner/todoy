@@ -1,5 +1,5 @@
 # todoy
-jpg.to clone
+The Most Complex URL Redirector on THE INTERNET.
 
 Takes word(s) from a subdomain and uses it to perform a Google Image search,
 which you are then pleasantly redirected to.
