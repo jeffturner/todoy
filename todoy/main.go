@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -23,14 +24,16 @@ func main() {
 	// HTTP handler to get request, parse subdomain, and send back the image URL
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		searchTerm := strings.ToLower(strings.Split(r.Host, ".")[0])
+		if r.URL.Path != "/" {
+			searchTerm = strings.ToLower(strings.Split(r.URL.Path[1:], ".")[0])
+			searchTerm = strings.TrimSuffix(searchTerm, filepath.Ext(searchTerm))
+		}
 
 		imageURL, err := redisClient.Get("todoy:" + searchTerm).Result()
 		if err == redis.Nil {
 			imageURL = searcher(r.RemoteAddr, searchTerm)
 			redisClient.Set("todoy:"+searchTerm, imageURL, time.Second*120)
 		}
-		fmt.Printf("%s: %s\n", searchTerm, imageURL)
-
 		w.Header().Set("Content-Type", "text/html")
 		w.Header().Set("Referer", imageURL)
 		fmt.Fprintf(w, "<html><img src=\"%s\"></html>\n", imageURL)
