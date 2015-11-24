@@ -25,7 +25,7 @@ func main() {
 		searchTerm := strings.ToLower(strings.Split(r.Host, ".")[0])
 
 		imageURL, err := redisClient.Get("todoy:" + searchTerm).Result()
-		if err != redis.Nil {
+		if err == redis.Nil {
 			imageURL = searcher(r.RemoteAddr, searchTerm)
 			redisClient.Set("todoy:"+searchTerm, imageURL, time.Second*120)
 		}
